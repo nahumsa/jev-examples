@@ -1,0 +1,19 @@
+[project]
+name = "jev-examples"
+version = "0.1.0"
+description = "Jev evaluation benchmarks for ABCD and Bitext customer-support tasks"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic-ai-slim[typesafe]>=2.52.0",
+    "transformers>=4.57,<5",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["abcd_benchmark/tests", "bitext_benchmark/tests"]
+pythonpath = ["."]

@@ -1,0 +1,47 @@
+{
+  "setup_and_assumptions": {
+    "type": "score",
+    "instructions": "How clearly and correctly does the proof establish its goal, assumptions, and relevant definitions?",
+    "criteria": [
+      "The goal or assumptions are missing, unclear, or incorrect.",
+      "The setup is mostly correct but has omissions or ambiguities.",
+      "The goal, assumptions, and relevant definitions are clear and correct."
+    ]
+  },
+  "logical_reasoning": {
+    "type": "score",
+    "instructions": "How valid is the proof's logical reasoning?",
+    "criteria": [
+      "Major logical errors or essential gaps undermine the argument.",
+      "The reasoning is mostly valid but some inferences need clarification.",
+      "Every inference is valid and the argument establishes the claim."
+    ]
+  },
+  "justification": {
+    "type": "score",
+    "instructions": "How adequately does the proof justify its non-obvious claims?",
+    "criteria": [
+      "Important claims are unsupported or rely on inapplicable results.",
+      "Most claims are supported but some explanations are insufficient.",
+      "All non-obvious claims are supported by explanations or applicable results."
+    ]
+  },
+  "clarity_and_notation": {
+    "type": "score",
+    "instructions": "How clearly is the proof written and how consistently does it use notation?",
+    "criteria": [
+      "The proof is difficult to follow and notation is unclear or inconsistent.",
+      "The proof is understandable but has organizational or notation issues.",
+      "The proof is well organized and uses precise, consistent notation."
+    ]
+  },
+  "completeness_and_conclusion": {
+    "type": "score",
+    "instructions": "How fully does the proof cover the required cases and establish the desired conclusion?",
+    "criteria": [
+      "Substantial parts of the claim or required cases are unaddressed.",
+      "The proof addresses most requirements but omits a case or leaves the conclusion implicit.",
+      "The proof covers all required cases and explicitly establishes the desired conclusion."
+    ]
+  }
+}

@@ -26,22 +26,20 @@ implemented. See [verification scope](proof_practice/README.md#formal-verificati
 
 ## Benchmarks
 
-The complete ABCD implementation, tests, and documentation live in
-[`abcd_benchmark/`](abcd_benchmark/README.md).
+| Benchmark | Tasks and implementation | Documentation |
+| --- | --- | --- |
+| ABCD | [AST/CDS](abcd_benchmark/ast_cds/), [conversation-prefix intent routing](abcd_benchmark/intent/), and [offline tests](abcd_benchmark/tests/) | [Setup and protocol](abcd_benchmark/README.md) |
+| Bitext | [Single-message intent classification](bitext_benchmark/evaluation.py) using Jev through PydanticAI, with [offline tests](bitext_benchmark/tests/) | [Setup and protocol](bitext_benchmark/README.md) |
 
-The Bitext customer-support intent benchmark lives in
-[`bitext_benchmark/`](bitext_benchmark/README.md), using Jev through PydanticAI.
-Prepare a small run without inference:
+Both benchmarks share the root Python environment. Proof Practice uses separate
+backend and frontend environments.
+
+Prepare a small Bitext run without inference:
 
 ```bash
 uv run python -m bitext_benchmark --download --dry-run \
   --output results/bitext/dev-inputs.jsonl
 ```
-
-Local Clef-Flash evaluation on the same Bitext protocol lives in
-[`clef_benchmark/`](clef_benchmark/README.md), with an isolated environment,
-pinned model revision, and paired comparison against saved Jev predictions.
-See its README for GPU requirements and run commands.
 
 From the repository root:
 

@@ -2,6 +2,13 @@
 
 A self-contained Next.js + FastAPI app for elementary mathematical proofs, using Jev and your exact five-part rubric.
 
+## Screenshot
+
+![Proof Practice showing a custom question, a submitted proof of the irrationality of square root of two, and Jev's five-part rubric feedback.](docs/images/proof-practice.png)
+
+Example study session with a custom question and proof feedback. The displayed
+scores are AI judgments, not formal verification.
+
 ## Run locally
 
 Requires Python 3.11+, [uv](https://docs.astral.sh/uv/), and Node.js 20.9+.

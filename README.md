@@ -1,5 +1,9 @@
 # Jev examples
 
+> [!NOTE]
+> This code was generated with AI assistance and has been curated by a human.
+> Human curation does not guarantee correctness; review and test it before relying on it.
+
 ## Proof Practice study app
 
 [`proof_practice/`](proof_practice/README.md) is a standalone Next.js study workspace

@@ -40,6 +40,9 @@ def parser() -> argparse.ArgumentParser:
     )
     result.add_argument("--limit", type=positive, help="Take the first N selected cases")
     result.add_argument("--repeat", type=positive, default=1)
+    result.add_argument(
+        "--max-calls", type=positive, help="Refuse plans above this SDK-call budget"
+    )
     result.add_argument("--concurrency", type=positive, default=1)
     result.add_argument(
         "--model", help="Override TYPESAFE_DEFAULT_MODEL; pin for reproducible runs"
@@ -120,7 +123,12 @@ def main(argv: list[str] | None = None) -> int:
     if args.limit:
         dataset.cases[:] = dataset.cases[: args.limit]
     calls = sum(2 if case.inputs.second_proof is not None else 1 for case in dataset.cases)
-    print(f"{len(dataset.cases)} cases × {args.repeat} repeats; {calls * args.repeat} Jev calls.")
+    planned_calls = calls * args.repeat
+    print(f"{len(dataset.cases)} cases × {args.repeat} repeats; {planned_calls} Jev calls.")
+    if args.max_calls is not None and planned_calls > args.max_calls:
+        cli.error(
+            f"Plan requires {planned_calls} Jev calls, exceeding --max-calls {args.max_calls}"
+        )
     if args.list:
         for case in dataset.cases:
             print(f"  {case.name} ({case.metadata.category})")

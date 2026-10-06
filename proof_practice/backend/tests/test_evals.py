@@ -12,6 +12,7 @@ from app.problems import BY_ID
 from evals.__main__ import REPORT_ADAPTER, main, parser, report_passed, run_live
 from evals.dataset import load_dataset
 from evals.models import EvalInput, EvalOutput, Expectations
+from evals.summary import cell, render_summary
 from evals.task import make_task
 
 
@@ -96,6 +97,32 @@ def test_full_harness_with_synthetic_provider():
     assert report_passed(decoded)
 
 
+def test_github_summary_of_live_outputs():
+    dataset = load_dataset()
+    dataset.cases[:] = [dataset.cases[0], dataset.cases[-2]]
+    report = asyncio.run(
+        dataset.evaluate(make_task(labeled_stub(dataset)), progress=False, max_concurrency=1)
+    )
+    summary = render_summary(report)
+    assert "**Status:** PASS" in summary
+    assert "**Completed cases:** 2" in summary
+    assert "completed cases:** 3" in summary
+    assert "correct-even-sum" in summary
+    assert dataset.cases[0].inputs.submission.proof not in summary
+    assert cell("<script>|line\nnext") == r"&lt;script&gt;\|line next"
+
+
+def test_github_summary_lists_failed_checks():
+    dataset = load_dataset()
+    dataset.cases[:] = [case for case in dataset.cases if case.name == "examples-are-not-a-proof"]
+    client = AsyncMock(system_one=AsyncMock(return_value=response_for({})))
+    report = asyncio.run(dataset.evaluate(make_task(client), progress=False))
+    summary = render_summary(report)
+    assert "**Status:** FAIL" in summary
+    assert "### Failed checks" in summary
+    assert "a_logical_reasoning_in_band" in summary
+
+
 def test_repeat_keeps_case_metrics_isolated():
     dataset = load_dataset()
     dataset.cases[:] = [dataset.cases[0], dataset.cases[-2]]
@@ -178,6 +205,17 @@ def test_cli_rejects_invalid_or_unauthorized_run(argv):
     with pytest.raises(SystemExit) as error:
         main(argv)
     assert error.value.code == 2
+
+
+def test_cli_enforces_call_budget_before_provider_construction(monkeypatch):
+    def forbidden(**kwargs):
+        pytest.fail("Over-budget plan constructed a provider")
+
+    monkeypatch.setattr("evals.__main__.AsyncTypeSafeClient", forbidden)
+    with pytest.raises(SystemExit) as error:
+        main(["--allow-paid", "--max-calls", "18", "--output", "unused.json"])
+    assert error.value.code == 2
+    assert main(["--list", "--max-calls", "19"]) == 0
 
 
 def test_cli_refuses_to_overwrite_report(tmp_path):

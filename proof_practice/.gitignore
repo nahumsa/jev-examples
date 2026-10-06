@@ -9,3 +9,4 @@
 **/.env.local
 !**/.env.example
 **/next-env.d.ts
+backend/eval-results/

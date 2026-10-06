@@ -25,6 +25,16 @@ Jev scores are study feedback, **not formal proof verification**. Lean checking
 and LLM-to-Lean formalization were discussed as future extensions and are not
 implemented. See [verification scope](proof_practice/README.md#formal-verification-scope).
 
+## Continuous integration
+
+[Tests](.github/workflows/ci.yml) runs offline benchmark and Proof Practice tests,
+backend linting, and the Next.js build on pushes and pull requests. It never uses
+an API key or performs paid inference.
+
+[Live Proof Practice evals](.github/workflows/proof-live-evals.yml) is a separate,
+manually authorized workflow that evaluates curated proofs with real Jev and saves
+per-case reports. See [secret setup, call budgets, and execution instructions](proof_practice/backend/evals/README.md#github-actions).
+
 ## Benchmarks
 
 | Benchmark | Tasks and implementation | Documentation |

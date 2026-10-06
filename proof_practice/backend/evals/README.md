@@ -57,6 +57,58 @@ Exit status is 0 only if all assertions pass without task/evaluator failures;
 1 means evaluation failure, and 2 means invalid CLI configuration. `--list` exits 0.
 Do not run live evaluations in CI by default.
 
+## GitHub Actions
+
+Two workflows are committed at the repository root:
+
+- [Tests](../../../.github/workflows/ci.yml): every push and pull request runs offline
+  benchmark/API/eval tests, backend linting, and the frontend build. No API secret
+  is supplied and no paid model calls are made.
+- [Proof Practice live Jev evaluations](../../../.github/workflows/proof-live-evals.yml):
+  manually runs the actual grading agent against Jev, not a mocked provider.
+  It accepts dispatches only for the default branch with paid authorization checked.
+
+### Enable live CI
+
+1. Push the workflow files to the repository's default branch.
+2. In GitHub **Settings → Environments**, create `proof-evals`. Restrict its deployment
+   branches to the default branch; add required reviewers where your GitHub plan permits.
+3. Add an environment secret named **`TYPESAFE_API_KEY`**. A repository Actions secret
+   of the same name also works, but environment protection is recommended. Never
+   upload `.env` or put the key into workflow YAML.
+4. Open **Actions → Proof Practice live Jev evaluations → Run workflow**. Select the
+   default branch, explicitly check paid authorization, and choose `smoke` or `full`.
+
+The smoke suite has 6 cases / 7 calls: a correct proof, examples-only reasoning,
+circular reasoning, a correct custom √2 proof, a false custom claim, and a
+polished-but-invalid versus valid comparison. The full suite has 17 cases / 19
+calls. Repeats are restricted to 1 or 3, so the largest planned run is 57 calls.
+The default is smoke × 1, with `jev-1.13.0`, one case at a time, and no retries.
+The workflow enforces the selected suite's planned SDK-call budget with
+`--max-calls` before constructing a provider, so growing the dataset cannot silently
+exceed that budget. This is not a dollar cap. The job times out after 20 minutes.
+
+The API secret is scoped to the inference step only. PRs, including forks, cannot
+trigger this workflow or receive the key. Live runs are serialized and not
+canceled automatically by newer runs. Failed quality assertions fail the job;
+do not loosen expectations solely to make CI green.
+
+Each completed run adds a per-case GitHub summary and uploads its JSON report,
+including failed assertions, as a 14-day artifact. A provider/setup failure or
+interruption may prevent a complete report; check logs rather than treating a
+missing report as a pass. Results use the real live model on curated mathematical
+proofs. They are not a dataset of independently annotated real student submissions.
+
+Optional GitHub CLI invocation after setup:
+
+```sh
+gh workflow run proof-live-evals.yml --ref main \
+  -f allow_paid=true -f suite=smoke -f repeat=1 -f model=jev-1.13.0
+```
+
+Use your repository's default branch in place of `main` if different. Once the run
+completes, inspect its job summary and download the `proof-practice-live-*` artifact.
+
 ## Dataset and evaluators
 
 [`cases.json`](cases.json) is loaded as

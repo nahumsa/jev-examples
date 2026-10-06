@@ -112,6 +112,10 @@ uv run python -m evals --list       # No-cost preview: 17 cases, 19 calls per re
 uv run pytest tests/test_evals.py -q  # Mocked offline harness checks
 ```
 
+GitHub Actions runs offline tests on every push and pull request. A separate
+manual workflow tests these cases against real Jev with a protected API secret,
+paid authorization, and uploaded reports. See [GitHub Actions setup](backend/evals/README.md#github-actions).
+
 Live runs require `--allow-paid` and a fresh `--output` path; see the
 [eval README](backend/evals/README.md#live-evaluation-paid) for commands, reporting,
 and limitations. Labels and score bands are provisional, not expert-validated

@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   benchmarks:
-    name: ABCD and Bitext offline tests
+    name: ABCD, Bitext, and sentiment offline tests
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

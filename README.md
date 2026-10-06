@@ -14,6 +14,7 @@ with a FastAPI/PydanticAI backend and Jev rubric evaluation.
 | Proof editor, browser-saved questions, and side-by-side feedback | [`page.tsx`](proof_practice/frontend/app/page.tsx) |
 | Local container deployment | [`docker-compose.yml`](proof_practice/docker-compose.yml) |
 | API and grading regression tests | [`test_app.py`](proof_practice/backend/tests/test_app.py) |
+| Pydantic Evals quality dataset, rubric checks, and paid-run safeguards | [`evals/`](proof_practice/backend/evals/README.md) |
 
 For installation, API-key setup, Docker commands, and checks, see the
 [Proof Practice README](proof_practice/README.md). The app has its own dependencies;

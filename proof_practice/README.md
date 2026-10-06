@@ -98,6 +98,25 @@ and neither the total nor confidence is used to issue a correctness verdict.
 Feedback uses the most probable rubric level (not rounding the expected score);
 revision tips are static templates. Jev does not generate prose explanations.
 
+## Quality evaluations (Pydantic Evals)
+
+The [evaluation suite](backend/evals/README.md) checks Jev grading against 17
+hand-authored cases: correct and invalid proofs, incomplete arguments, alternative
+methods, custom claims, prompt injection, and two-answer comparisons. It uses
+Pydantic Evals with deterministic rubric checks, not an additional LLM judge.
+
+```sh
+cd proof_practice/backend
+uv sync --locked
+uv run python -m evals --list       # No-cost preview: 17 cases, 19 calls per repeat
+uv run pytest tests/test_evals.py -q  # Mocked offline harness checks
+```
+
+Live runs require `--allow-paid` and a fresh `--output` path; see the
+[eval README](backend/evals/README.md#live-evaluation-paid) for commands, reporting,
+and limitations. Labels and score bands are provisional, not expert-validated
+truth. Offline harness tests do not establish Jev's grading quality.
+
 ## Formal verification scope
 
 This app currently evaluates prose using Jev. It does not run Lean, translate
